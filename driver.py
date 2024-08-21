@@ -3,6 +3,9 @@ from pyspark.context import SparkContext as sc
 import pyspark.sql.functions as F
 from pyspark.sql import DataFrame
 from pyspark.sql.types import StructType, StructField, IntegerType, StringType, ArrayType
+from schema_repository import SchemaRepository
+from my_types import SchemaEnum
+
 
 if __name__ == "__main__":
     spark = ps.sql.SparkSession.builder.appName("Test").master("local[*]").getOrCreate()
@@ -125,21 +128,10 @@ if __name__ == "__main__":
     # show data frame
     orders_dataframe.show(truncate=False)
 
-    products_schema = StructType([
-        StructField("Id", IntegerType(), True),
-        StructField("Name", StringType(), True),
-        StructField("Category", StringType(), True),
-        StructField("Brand", StringType(), True),
-        StructField("Color", StringType(), True),
-        StructField("Material", StringType(), True)
-    ])
+    repo = SchemaRepository()
+    order_items_schema = repo.getSchema(SchemaEnum.ORDER_ITEM)
+    products_schema = repo.getSchema(SchemaEnum.PRODUCT)
 
-    inner_order_items_schema = StructType([
-        StructField("product_id", IntegerType(), True),
-        StructField("unit_price", IntegerType(), True),
-        StructField("quantity", IntegerType(), True),
-    ])
-    order_items_schema = ArrayType(inner_order_items_schema, True)
 
     order_df = (orders_dataframe
                 .withColumn("items", F.from_json(F.col("order_item_list"), order_items_schema))
