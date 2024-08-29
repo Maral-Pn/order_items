@@ -1,6 +1,6 @@
 
 from pyspark.sql.types import StructType, StructField, IntegerType, StringType, DateType, ArrayType
-from my_types import SchemaEnum
+from code.core.schema.my_types import SchemaEnum
 
 class SchemaRepository:
     def __init__(self):
