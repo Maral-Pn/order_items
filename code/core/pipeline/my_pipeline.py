@@ -1,15 +1,15 @@
 import pyspark as ps
 import pyspark.sql
 from pyspark.sql import DataFrame
-from code.core.schema.schema_repository import SchemaRepository
-from code.core.schema.my_types import SchemaEnum
-from code.core.io.input_output import InputOutput
-from code.core.transform.transformer import Transformer
+from core.schema.schema_repository import SchemaRepository
+from core.schema.my_types import SchemaEnum
+from core.io.input_output import InputOutput
+from core.transform.transformer import Transformer
 
 
 class Pipeline:
 
-    def initialiseSpark(self,master: str) -> pyspark.sql.SparkSession:
+    def initialiseSpark(self, master: str) -> pyspark.sql.SparkSession:
         match master:
             case "local":
                 spark = ps.sql.SparkSession.builder.appName("Test").master("local[*]").getOrCreate()
@@ -23,6 +23,7 @@ class Pipeline:
         order_df = self.readOrder()
         product_df = self.readProduct()
         o_df = self.transformOrder(order_df)
+        o_df.show(truncate=False)
         p_df = self.transformProduct(product_df)
         j_df_final = self.transformJoined(o_df, p_df)
         total_price = self.transformTotalPrice(j_df_final)
@@ -44,6 +45,7 @@ class Pipeline:
 
         transformer = Transformer(self.spark)
         prd_rich_df = transformer.flattenProduct(product_dataframe, products_schema)
+        prd_rich_df.show(truncate=False)
         prd_df = transformer.getProductDataframe(prd_rich_df)
         prd_df.show(truncate=False)
         return prd_df
@@ -55,7 +57,6 @@ class Pipeline:
         transformer = Transformer(self.spark)
         order_rich_df = transformer.flattenOrder(order_dataframe, order_items_schema)
         order_df = transformer.getOrderDataframe(order_rich_df)
-        order_df.show(truncate=False)
         return order_df
 
     def transformJoined(self, order_df: DataFrame, prd_df: DataFrame) -> DataFrame:
