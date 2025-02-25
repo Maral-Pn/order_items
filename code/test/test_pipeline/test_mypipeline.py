@@ -1,6 +1,6 @@
 from unittest import TestCase
-from code.test.test_base import TestBase
-from code.core.pipeline.my_pipeline import *
+from test.test_base import TestBase
+from core.pipeline.my_pipeline import *
 
 
 class TestTransformer(TestBase):
