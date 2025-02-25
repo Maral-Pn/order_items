@@ -1,6 +1,6 @@
 from unittest import TestCase
-from code.test.test_base import TestBase
-from code.core.transform.transformer import Transformer
+from test.test_base import TestBase
+from core.transform.transformer import Transformer
 
 
 class TestTransformer(TestBase):
