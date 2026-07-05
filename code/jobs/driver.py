@@ -1,9 +1,11 @@
+from core.config.pipeline_config import PipelineConfig
 from core.pipeline.my_pipeline import Pipeline
 
 if __name__ == "__main__":
 
-    pipline = Pipeline()
-    pipline.initialiseSpark("local")
-    pipline.runPipeline()
+    config = PipelineConfig()
+    pipeline = Pipeline(config, verbose=True)
+    pipeline.initialiseSpark(config.master)
+    pipeline.runPipeline()
 
 

@@ -1,12 +1,15 @@
 from pyspark.sql import SparkSession, DataFrame
 
-class InputOutput:
+from core.io.data_source import DataSource
+
+
+class DummyDataSource(DataSource):
+    """In-memory fixture data, used for local runs and tests until a real source exists."""
+
     def __init__(self, spark: SparkSession):
         self.spark = spark
 
-    def getDummyOrder(self) -> DataFrame:
-
-
+    def get_order_data(self) -> DataFrame:
         order_item_list = [
 
             """[{
@@ -56,10 +59,9 @@ class InputOutput:
                   ["Hossein Bakhtiari", "Shohre Tabatabae", "2024-04-05", order_item_list[1]]]
 
         columns = ["client_name", "seller_name", "purchase_date", "order_item_list"]
-        order_dataframe = self.spark.createDataFrame(orders, columns)
+        return self.spark.createDataFrame(orders, columns)
 
-        return order_dataframe
-    def getDummyProduct(self) -> DataFrame:
+    def get_product_data(self) -> DataFrame:
         products = [
             ["""
          {
@@ -122,10 +124,4 @@ class InputOutput:
         ]
 
         columns = ["products"]
-        product_dataframe = self.spark.createDataFrame(products, columns)
-        return product_dataframe
-
-
-
-    def getParquet(self, spark: SparkSession):
-        pass
+        return self.spark.createDataFrame(products, columns)

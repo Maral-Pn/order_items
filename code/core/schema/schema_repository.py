@@ -5,8 +5,8 @@ from core.schema.my_types import SchemaEnum
 class SchemaRepository:
     def __init__(self):
         pass
-    def getSchema(self, type: SchemaEnum) -> StructType:
-        match type:
+    def getSchema(self, schema_type: SchemaEnum) -> StructType:
+        match schema_type:
             case SchemaEnum.PRODUCT:
                 schema = StructType([
                     StructField("Id", LongType(), True),
@@ -26,6 +26,6 @@ class SchemaRepository:
                 schema = ArrayType(inner_order_items_schema, True)
 
             case _:
-                raise NotImplemented
+                raise NotImplementedError(f"No schema registered for {schema_type}")
 
         return schema

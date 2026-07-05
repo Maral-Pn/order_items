@@ -2,7 +2,9 @@ from pyspark.sql import SparkSession, DataFrame
 import pyspark.sql.functions as F
 from pyspark.sql.types import StructType
 
-class Transformer():
+class Transformer:
+    DEFAULT_GST_RATE = 1.03
+
     def __init__(self, spark: SparkSession):
         self.spark = spark
 
@@ -31,17 +33,15 @@ class Transformer():
                       )
               )
         return df
-    def joinDataframe(self, order_df: DataFrame, prd_df: DataFrame):
-        order_df.printSchema()
+    def joinDataframe(self, order_df: DataFrame, prd_df: DataFrame) -> DataFrame:
         joined_df = order_df.join(prd_df, order_df.product_id == prd_df.Id, how='inner')
         joined_df = joined_df.drop('Id')
         return joined_df
 
-    def getReciptDataframe(self, df: DataFrame) -> DataFrame:
-        gst = 1.03
+    def getReceiptDataframe(self, df: DataFrame, gst_rate: float = DEFAULT_GST_RATE) -> DataFrame:
         df = (df
               .groupBy(F.col("client_name"))
-              .agg(F.sum(F.col("unit_price") * F.col("quantity") * gst)
+              .agg(F.sum(F.col("unit_price") * F.col("quantity") * gst_rate)
                    .alias("Total_price_with_gst")))
         return df
 
