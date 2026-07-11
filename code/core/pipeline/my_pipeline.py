@@ -30,7 +30,7 @@ class Pipeline:
                 spark = ps.sql.SparkSession.builder.appName("Test").master("local[*]").getOrCreate()
 
             case m:
-                spark = ps.sql.SparkSession.builder.appName("test").master(m).getOrCreate()
+                spark = ps.sql.SparkSession.builder.appName("Test").master(m).getOrCreate()
 
         self.spark = spark
         self.transformer = Transformer(spark)

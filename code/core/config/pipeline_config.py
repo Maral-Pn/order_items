@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 
+from core.transform.transformer import Transformer
+
 
 @dataclass(frozen=True)
 class PipelineConfig:
@@ -7,4 +9,4 @@ class PipelineConfig:
     output_path: str = "total_price"
     partition_column: str = "client_name"
     write_mode: str = "overwrite"
-    gst_rate: float = 1.03
+    gst_rate: float = Transformer.DEFAULT_GST_RATE
