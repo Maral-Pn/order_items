@@ -114,3 +114,5 @@ spark-submit --master local --py-files code/core.zip code/jobs/driver.py
 cd code
 python -m pytest
 ```
+
+_Last verified: git push access confirmed on 2026-07-11._
