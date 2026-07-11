@@ -33,7 +33,7 @@ cd ..
 spark-submit --master local --py-files code/core.zip code/jobs/driver.py
 ```
 
-There is no lint step currently enforced — the flake8 step in CI is commented out.
+There is no lint step in CI — a previously-commented-out flake8 step was removed rather than re-enabled.
 
 ## Architecture
 

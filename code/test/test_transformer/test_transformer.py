@@ -1,4 +1,4 @@
-from unittest import TestCase
+import unittest
 from test.test_base import TestBase
 from core.transform.transformer import Transformer
 from core.schema.schema_repository import SchemaRepository
@@ -23,8 +23,8 @@ class TestTransformer(TestBase):
         flattened = result.select("client_name", "seller_name", "purchase_date", "items_exp.*")
 
         expected_rows = [
-            ["Maral Pourdayan", "Parsa Pirouzfar", "2024-03-13", 44, 550, 6],
-            ["Maral Pourdayan", "Parsa Pirouzfar", "2024-03-13", 54, 1200, 1],
+            ["Maral Pourdayan", "Parsa Pirouzfar", "2024-03-13", 44, 550.0, 6],
+            ["Maral Pourdayan", "Parsa Pirouzfar", "2024-03-13", 54, 1200.0, 1],
         ]
         expected_columns = ["client_name", "seller_name", "purchase_date", "product_id", "unit_price", "quantity"]
         expected_df = self.spark.createDataFrame(expected_rows, expected_columns)
@@ -46,6 +46,22 @@ class TestTransformer(TestBase):
         expected_df = self.spark.createDataFrame(expected_rows, expected_columns)
 
         self.assertDataFrameEqual(flattened, expected_df)
+
+    def test_getProductDataframe(self):
+        products = [['{"Id": 44, "Name": "Flower Chair", "Category": "Furniture", '
+                     '"Brand": "Ikea", "Color": "White", "Material": "cotton"}']]
+        columns = ["products"]
+        product_df = self.spark.createDataFrame(products, columns)
+
+        schema = self.schema_repository.getSchema(SchemaEnum.PRODUCT)
+        flattened = self.transformer.flattenProduct(product_df, schema)
+        result = self.transformer.getProductDataframe(flattened)
+
+        expected_rows = [[44, "Flower Chair", "Furniture", "Ikea", "White", "cotton"]]
+        expected_columns = ["Id", "Name", "Category", "Brand", "Color", "Material"]
+        expected_df = self.spark.createDataFrame(expected_rows, expected_columns)
+
+        self.assertDataFrameEqual(result, expected_df)
 
     def test_joinDataframe(self):
         order_rows = [
