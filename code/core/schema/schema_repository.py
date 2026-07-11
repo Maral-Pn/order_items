@@ -1,5 +1,5 @@
 
-from pyspark.sql.types import StructType, StructField, LongType, StringType, DateType, ArrayType
+from pyspark.sql.types import StructType, StructField, LongType, DoubleType, StringType, DateType, ArrayType
 from core.schema.my_types import SchemaEnum
 
 class SchemaRepository:
@@ -19,7 +19,7 @@ class SchemaRepository:
             case SchemaEnum.ORDER_ITEM:
                 inner_order_items_schema = StructType([
                     StructField("product_id", LongType(), True),
-                    StructField("unit_price", LongType(), True),
+                    StructField("unit_price", DoubleType(), True),
                     StructField("quantity", LongType(), True),
                 ])
 
