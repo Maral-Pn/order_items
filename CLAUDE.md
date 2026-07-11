@@ -90,6 +90,7 @@ transformer behavior is actually covered.
 from inside `code/`), zips `code/core` into `core.zip`, then does a local
 `spark-submit` of the driver as a smoke test.
 
-Note: as of this writing, no run of this workflow has ever completed on GitHub despite
-multiple merges to `main` — worth checking the repo's Actions settings if you need CI
-signal.
+CI is confirmed working: recent pushes to `main` have completed successfully
+(`gh run list` shows green runs for the last two merges). If a run doesn't
+show up for a push, check the repo's Actions settings first — Actions has
+been disabled for periods in the past.
