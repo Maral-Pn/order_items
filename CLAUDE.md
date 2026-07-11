@@ -79,8 +79,9 @@ omitted):
 Tests (`code/test/`) mirror this structure (`test_pipeline/`, `test_transformer/`) and
 share `TestBase` (`code/test/test_base.py`), which spins up a local `SparkSession` per
 test and provides `assertDataFrameEqual` (schema + data equality via
-`pyspark.testing`). Several test methods are stubs (`pass`) — check before assuming
-transformer behavior is actually covered.
+`pyspark.testing`). `test_transformer.py` covers `flattenOrder`, `flattenProduct`,
+`joinDataframe`, and `getReceiptDataframe` (including the GST total math); no test
+stubs remain.
 
 ## CI/CD
 
@@ -90,7 +91,7 @@ transformer behavior is actually covered.
 from inside `code/`), zips `code/core` into `core.zip`, then does a local
 `spark-submit` of the driver as a smoke test.
 
-CI is confirmed working: recent pushes to `main` have completed successfully
-(`gh run list` shows green runs for the last two merges). If a run doesn't
-show up for a push, check the repo's Actions settings first — Actions has
-been disabled for periods in the past.
+CI is confirmed working: the last three pushes to `main` (including both the
+push event and the PR's `pull_request` event for the most recent merge) have
+completed successfully. If a run doesn't show up for a push, check the repo's
+Actions settings first — Actions has been disabled for periods in the past.
